@@ -23,17 +23,217 @@
         <meta name="format-detection" content="telephone=no" />
         <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <title>Hello World</title>
+		<link rel="stylesheet" href="css/jquery.mobile-1.4.0.min.css" />
+		<script src="js/jquery-1.9.1.min.js"></script>
+		<script src="js/jquery-mobile-1.4.0.min.js"></script>
+		<!--Begin Google Maps API -->
+		<style>
+			#map-canvas { width: 100%; height: 100%; padding: 0; }
+		</style>
+		<script src="http://maps.google.com/maps/api/js?sensor=false&libraries=places"></script>
+		<!--Begin Jquery UI and touchpounch -->
+		<link rel="stylesheet" href="css/jquery-ui.css">
+		<link rel="stylesheet" href="css/slider.css">
+		<script src="js/slider.js"></script>
+		<script src="js/jquery-ui.js"></script>
+		<script src="js/jquery.ui.touch-punch.js"></script>
+        <title>Find My Driver</title>
+		<script>
+			function userSignIn(){
+				event.preventDefault();
+				var si_email = document.getElementById("si_email").value;
+				var si_passWord = document.getElementById("si_pw").value;
+				var si_userName = si_email.split("@",1).toString();
+				window.username = si_userName;
+				//var si_userName = si_userNameArray.toString();
+				alert(si_userName);
+				if(si_userName.length<1){
+					alert("You must enter a username!");
+				}else{
+					if(si_passWord.length<1){
+						alert("You must enter your password");
+					}else{
+					$('#result').empty().append('<center><p>Performing your sign in request...</p></center>');		 /* stop form from submitting normally */
+						$.getJSON('http://www.findmydriver.com/usrsi.php?callback=?', {
+								appname: "FindMyDriver",
+								RQType: "userSignIn",
+								email:	si_email,
+								username: si_userName,
+								password: si_passWord
+							},
+							function(res,status){
+			//				    alert(res.message);
+								if(res.validation=='TRUE'){
+									$('#result').empty().append('<center><p>'+ res.message + res.validation + '</p></center>');
+									$('#result').empty();
+									window.location = "#home"
+								}else{
+								//	$('#result').empty().append('<center><p>'+ res.message +'valid: '+ res.validation +'</br> Click Register to create your free account</p></center>');
+								}
+		//						$('#result').empty().append('<center><p>'+ res.validation + '</p></center>');
+		//					    alert(status);
+						});
+					}
+				}
+	//		alert("user Sign in Clicked");
+			//	$.mobile.changePage( "#home", { transition: "fade", changeHash: false, reloadPage: true });
+			}
+			function userRegister(){
+				event.preventDefault();
+				var reg_passwd1 = document.getElementById("reg_pw1").value;
+				//	alert(reg_passwd1);
+				var reg_passwd2 = document.getElementById("reg_pw2").value;
+				//	alert(reg_passwd2);
+				var reg_email = document.getElementById("reg_email").value;
+				var reg_username = reg_email.split("@",1).toString();
+				alert(reg_username);
+					if(reg_passwd1==reg_passwd2){
+						//alert("passwords match!");
+						$.getJSON('http://www.findmydriver.com/usreg.php?callback=?', {
+								appname: "FindMyDriver",
+								RQType: "userRegister",
+								email: reg_email,
+								password: reg_passwd1,
+								username: reg_username,
+							},
+							function(res,status){
+						    alert(res.message);
+							window.location = "#home"
+		//				    alert(status);
+						});
+					}else{
+						alert("The passwords you entered do not match!");
+					}
+				/*alert("This is a Registration Test");
+				alert(document.getElementById("reg_un").value);
+				alert(document.getElementById("reg_pw1").value);
+				alert(document.getElementById("reg_pw2").value);*/
+			}	
+			function sendFeedback(){
+				alert("Feedback will be sent to requester");
+			}	
+			function submitRequest(){
+				alert("Request will be composed as an email and sent to OTRS");
+			}	
+		</script>
     </head>
     <body>
-        <div class="app">
-            <h1>Apache Cordova</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
-            </div>
-        </div>
+		<div data-role="page" id="main" data-position="fixed">
+				<div data-role="header" class="logo" >
+						<h1>UBM Change Request Login</h1>
+				</div>
+				<div data-role="content">
+					<center><div id="main_map_canvas" style="position:fixed; margin-left:auto; margin-right:auto; height:200px; width:200px; -webkit-mask-image: url(circle.svg)"></div></center>
+					<form>
+						<div style="padding:10px 20px;">
+					        <label for="un" class="ui-hidden-accessible">Username:</label>
+					        <input type="text" name="si_user" id="si_email" value="" placeholder="Username" data-theme="a" />
+					        <label for="pw" class="ui-hidden-accessible">Password:</label>
+					        <input type="password" name="si_pass" id="si_pw" value="" placeholder="Password" data-theme="a" />
+					    	<button data-theme="b" data-icon="check" onclick="userSignIn()">Sign in</button>
+
+						</div>
+					</form>
+				  	<div id="result" style="background-color: white;">
+							  	
+					</div>
+					<center><a href="#popupRegister" data-rel="popup" data-position-to="window" data-role="button" data-inline="true" data-icon="check" data-theme="b" data-transition="pop">Register</a></center>
+					<div data-role="popup" id="popupRegister" data-theme="a">
+						<form>
+							<div style="padding:10px 20px;">
+								<h3>Registration is Free!</h3>
+						        <label for="un" class="ui-hidden-accessible">Email:</label>
+						        <input type="email" name="reg_email" id="reg_email" value="" placeholder="Email" data-theme="a" />
+						        <label for="reg_pw1" class="ui-hidden-accessible">Password:</label>
+						        <input type="password" name="reg_pass1" id="reg_pw1" value="" placeholder="Enter Password" data-theme="a" />
+								<label for="reg_pw2" class="ui-hidden-accessible">Password:</label>
+						        <input type="password" name="reg_pass2" id="reg_pw2" value="" placeholder="Confirm Password" data-theme="a" />
+						    	<button data-theme="b" data-icon="check" onclick="userRegister()">Create Account!</button>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div data-role="footer" data-position="fixed" data-fullscreen="true">
+					<center><p>Welcome to UBM Alpha v1.0</p></center>
+					<center><a href="#newnote" data-role="button" data-icon="plus" onclick="testConnection()">Test Connection</a></center>
+				</div>
+			</div>
+		<div data-role="page" id="home" data-position="fixed">
+				<div data-role="panel" id="defaultpanel" data-position="right" data-theme="b">
+					<center><a href="#home" data-theme="b" data-role="button" data-icon="grid">Request Page</a></center>
+					<center><a href="#submitfeedback" data-theme="b" data-role="button" data-icon="grid">Feedback Page</a></center>
+				</div><!-- /defaultpanel -->
+				<div data-role="header" class="logo" >
+					<a href="#defaultpanel" data-icon="arrow-l" data-iconpos="notext">Menu</a>						
+						<h1>UBM Change Request Request Page</h1>
+				</div>
+				<div data-role="content">
+					<label for="text-basic">Submitter:</label>
+					<input type="text" name="text-basic" id="text-basic" value="">
+					<label for="text-basic">CCODE:</label>
+					<input type="text" name="text-basic" id="text-basic" value="">
+					<label for="text-basic">Date Submitted:</label>
+					<input type="text" name="text-basic" id="text-basic" value="">
+					<label for="text-basic">Version:</label>
+					<input type="text" name="text-basic" id="text-basic" value="">
+					<label for="text-basic">Phone #:</label>
+					<input type="text" name="text-basic" id="text-basic" value="">
+					<label for="text-basic">UBM Ref Model #:</label>
+					<input type="text" name="text-basic" id="text-basic" value="">
+					<label for="text-basic">BM Ref Manual #:</label>
+					<input type="text" name="text-basic" id="text-basic" value="">
+					<label for="textarea">Description:</label>
+					<textarea cols="40" rows="8" name="textarea" id="textarea"></textarea>				
+					<button data-theme="b" data-icon="check" onclick="submitRequest()">Submit Request</button>
+
+				</div>
+				<div data-role="footer" data-position="fixed" data-fullscreen="true">
+
+				</div>
+			</div>
+		<div data-role="page" id="submitfeedback" data-position="fixed">
+				<div data-role="panel" id="defaultpanel2" data-position="right" data-theme="b">
+					<center><a href="#home" data-theme="b" data-role="button" data-icon="grid">Request Page</a></center>
+					<center><a href="#submitfeedback" data-theme="b" data-role="button" data-icon="grid">Feedback Page</a></center>
+				</div><!-- /defaultpanel -->
+				<div data-role="header" class="logo" >
+					<a href="#defaultpanel2" data-icon="arrow-l" data-iconpos="notext">Menu</a>										
+						<h1>UBM Change Request Response Page</h1>
+				</div>
+				<div data-role="content">
+					<label for="text-basic">Submitter:</label>
+					<input type="text" name="text-basic" id="text-basic" value="">
+					<label for="text-basic">CCODE:</label>
+					<input type="text" name="text-basic" id="text-basic" value="">
+					<label for="text-basic">Date Submitted:</label>
+					<input type="text" name="text-basic" id="text-basic" value="">
+					<label for="text-basic">Version:</label>
+					<input type="text" name="text-basic" id="text-basic" value="">
+					<label for="text-basic">Phone #:</label>
+					<input type="text" name="text-basic" id="text-basic" value="">
+					<label for="text-basic">UBM Ref Model #:</label>
+					<input type="text" name="text-basic" id="text-basic" value="">
+					<label for="text-basic">BM Ref Manual #:</label>
+					<input type="text" name="text-basic" id="text-basic" value="">
+					<label for="textarea">Description:</label>
+					<textarea cols="40" rows="8" name="textarea" id="textarea"></textarea>
+
+					<fieldset data-role="controlgroup">
+					    <legend>Resolution:</legend>
+					        <input type="radio" name="radio-choice-1" id="radio-choice-1" value="choice-1" checked="checked">
+					        <label for="radio-choice-1">Possible Future Approval</label>
+					        <input type="radio" name="radio-choice-1" id="radio-choice-2" value="choice-2">
+					        <label for="radio-choice-2">Rejected </label>
+					        <input type="radio" name="radio-choice-1" id="radio-choice-3" value="choice-3">
+					        <label for="radio-choice-3">Approve Next Version</label>
+					</fieldset>					
+					<button data-theme="b" data-icon="check" onclick="sendFeedback()">Send Feedback</button>
+
+				</div>
+				<div data-role="footer" data-position="fixed" data-fullscreen="true">
+
+				</div>
+			</div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript">

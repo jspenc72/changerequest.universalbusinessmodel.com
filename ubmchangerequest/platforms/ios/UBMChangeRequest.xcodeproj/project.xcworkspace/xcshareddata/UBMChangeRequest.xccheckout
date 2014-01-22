@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>116949B4-02E5-4173-801E-F435C2CF26DF</string>
+	<key>IDESourceControlProjectName</key>
+	<string>UBMChangeRequest</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>FF5ABD5B-D0BF-4D50-9A75-1682871A68BD</key>
+		<string>https://github.com/jspenc72/changerequest.universalbusinessmodel.com.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>ubmchangerequest/platforms/ios/UBMChangeRequest.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>FF5ABD5B-D0BF-4D50-9A75-1682871A68BD</key>
+		<string>../../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/jspenc72/changerequest.universalbusinessmodel.com.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>FF5ABD5B-D0BF-4D50-9A75-1682871A68BD</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>FF5ABD5B-D0BF-4D50-9A75-1682871A68BD</string>
+			<key>IDESourceControlWCCName</key>
+			<string>changerequest.universalbusinessmodel</string>
+		</dict>
+	</array>
+</dict>
+</plist>
