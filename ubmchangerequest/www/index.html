@@ -46,7 +46,7 @@
 				var si_userName = si_email.split("@",1).toString();
 				window.username = si_userName;
 				//var si_userName = si_userNameArray.toString();
-				alert(si_userName);
+				//alert(si_userName);
 				if(si_userName.length<1){
 					alert("You must enter a username!");
 				}else{
@@ -172,8 +172,8 @@
 					<input type="text" name="text-basic" id="text-basic" value="">
 					<label for="text-basic">CCODE:</label>
 					<input type="text" name="text-basic" id="text-basic" value="">
-					<label for="text-basic">Date Submitted:</label>
-					<input type="text" name="text-basic" id="text-basic" value="">
+					<label for="datetime-4">Date Submitted</label>
+					<input type="datetime-local" data-clear-btn="true"  id="gettingStarted_submitreviewpoint_duedatetime" value="" placeholder="Due Datetime...">
 					<label for="text-basic">Version:</label>
 					<input type="text" name="text-basic" id="text-basic" value="">
 					<label for="text-basic">Phone #:</label>
@@ -227,6 +227,22 @@
 					        <label for="radio-choice-3">Approve Next Version</label>
 					</fieldset>					
 					<button data-theme="b" data-icon="check" onclick="sendFeedback()">Send Feedback</button>
+
+				</div>
+				<div data-role="footer" data-position="fixed" data-fullscreen="true">
+
+				</div>
+			</div>
+		<div data-role="page" id="template" data-position="fixed">
+				<div data-role="panel" id="defaultpanel2" data-position="right" data-theme="b">
+					<center><a href="#home" data-theme="b" data-role="button" data-icon="grid">Request Page</a></center>
+					<center><a href="#submitfeedback" data-theme="b" data-role="button" data-icon="grid">Feedback Page</a></center>
+				</div><!-- /defaultpanel -->
+				<div data-role="header" class="logo">
+					<a href="#defaultpanel2" data-icon="arrow-l" data-iconpos="notext">Menu</a>										
+						<h1>UBM Change Response Page</h1>
+				</div>
+				<div data-role="content">
 
 				</div>
 				<div data-role="footer" data-position="fixed" data-fullscreen="true">

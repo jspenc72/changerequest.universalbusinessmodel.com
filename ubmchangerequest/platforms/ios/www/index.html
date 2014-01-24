@@ -46,7 +46,7 @@
 				var si_userName = si_email.split("@",1).toString();
 				window.username = si_userName;
 				//var si_userName = si_userNameArray.toString();
-				alert(si_userName);
+				//alert(si_userName);
 				if(si_userName.length<1){
 					alert("You must enter a username!");
 				}else{
@@ -154,7 +154,7 @@
 					</div>
 				</div>
 				<div data-role="footer" data-position="fixed" data-fullscreen="true">
-					<center><p>Welcome to UBM Alpha v1.0</p></center>
+					<center><p>Welcome to UBM Alpha v1.1</p></center>
 					<center><a href="#newnote" data-role="button" data-icon="plus" onclick="testConnection()">Test Connection</a></center>
 				</div>
 			</div>
@@ -172,8 +172,8 @@
 					<input type="text" name="text-basic" id="text-basic" value="">
 					<label for="text-basic">CCODE:</label>
 					<input type="text" name="text-basic" id="text-basic" value="">
-					<label for="text-basic">Date Submitted:</label>
-					<input type="text" name="text-basic" id="text-basic" value="">
+					<label for="datetime-4">Date Submitted</label>
+					<input type="datetime-local" data-clear-btn="true"  id="gettingStarted_submitreviewpoint_duedatetime" value="" placeholder="Due Datetime...">
 					<label for="text-basic">Version:</label>
 					<input type="text" name="text-basic" id="text-basic" value="">
 					<label for="text-basic">Phone #:</label>
