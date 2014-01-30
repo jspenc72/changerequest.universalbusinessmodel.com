@@ -109,12 +109,146 @@
 				alert(document.getElementById("reg_pw1").value);
 				alert(document.getElementById("reg_pw2").value);*/
 			}	
-			function sendFeedback(){
+			function submitFeedback(){
+				event.preventDefault();
+				var reviewer_member_id = document.getElementById("reviewer_member_id").value;
+				var resolution_explanation = document.getElementById("resolution_explanation").value;
+				var resolution = $("#resolution :radio:checked").val()
 				alert("Feedback will be sent to requester");
+					$.getJSON('http://www.findmydriver.com/ubm_changerequest_createnewfeedback.php?callback=?', {
+							reviewermemberid: window.username,
+							resolutionexplanation: resolution_explanation,
+							resolution: resolution,
+							ubmchangerequestid: window.activerequest
+						},
+						function(res,status){
+							$.each(res, function(i, record) {
+								//$('#managemyChecklists_content').append("");
+								//alert(record.message);
+								//$('#managemyChecklists_content').append("<fieldset data-role='controlgroup'><input type='checkbox' name='checkbox-agree' id='sr_step10' class='custom' /><label for='sr_step10'>"+ item.item_text +"</label></fieldset>");
+							});	
+							if (status == "success") {
+								$('#feedbackPopupForm').each(function() {
+									this.reset();
+								});
+							}
+						    alert(status);
+						    alert(window.activerequest);
+					});
 			}	
 			function submitRequest(){
 				alert("Request will be composed as an email and sent to OTRS");
-			}	
+					$.getJSON('http://www.findmydriver.com/ubm_changerequest_createnewrequest.php?callback=?', {
+							submitter: window.username,
+							ccode: "myID",
+							date_submitted: "myID",
+							ubm_version: "myID",
+							contact_phone: "myID",
+							contact_email: "contact_email",
+							bm_ref_model: "bm_ref_model",
+							ubm_ref_model: "ubm_ref_model",
+							description: "description",
+							status: "status",
+						},
+						function(res,status){
+							$.each(res, function(i, record) {
+								//$('#managemyChecklists_content').append("");
+								//alert(record.reviewer_member_id);
+								//$('#managemyChecklists_content').append("<fieldset data-role='controlgroup'><input type='checkbox' name='checkbox-agree' id='sr_step10' class='custom' /><label for='sr_step10'>"+ item.item_text +"</label></fieldset>");
+							});	
+								//alert(res.message);
+								//window.location = "#home"
+						    alert(status);
+					});
+
+			}
+	        function retrieveImage() {
+				alert("retrieveImage");
+	            // Retrieve image file location from specified source
+	            navigator.camera.getPicture(
+	                uploadPhoto,
+	                function(message) { alert('get picture failed'); },
+	                {
+	                    quality         : 50,
+	                    destinationType : navigator.camera.DestinationType.FILE_URI,
+	                    sourceType      : navigator.camera.PictureSourceType.CAMERA
+	                }
+	            );
+	        }
+	        function uploadPhoto(imageURI) {
+	            var options = new FileUploadOptions();
+	            options.fileKey="file";
+	            options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
+	            options.mimeType="image/jpeg";
+	
+	            var params = {};
+	            params.value1 = "test";
+	            params.value2 = "param";
+	
+	            options.params = params;
+	
+	            var ft = new FileTransfer();
+	            ft.upload(imageURI, encodeURI("http://localhost:9001/"), win, fail, options);
+	        }
+	        function win(r) {
+	            console.log("Code = " + r.responseCode);
+	            console.log("Response = " + r.response);
+	            console.log("Sent = " + r.bytesSent);
+	        }
+	        function fail(error) {
+	            alert("An error has occurred: Code = " + error.code);
+	            console.log("upload error source " + error.source);
+	            console.log("upload error target " + error.target);
+	        }				
+			function retrieveFeedback(){
+				alert("Feedback will now be retrieved!");
+						$.getJSON('http://localhost:9001/ubmChangeRequestFeedback/retrieve/?callback=?', {
+								name: "UBMChangeRequest Feedback",
+								id: "myID"
+							},
+							function(res,status){
+									$("#feedbackListview").empty();
+								$.each(res, function(i, record) {
+									//$('#managemyChecklists_content').append("");
+									//alert(record.reviewer_member_id);
+									
+									$('#feedbackListview').append("<li><a href='#'><h1>"+record.reviewer_member_id+"</h1><h2>"+record.resolution_explanation+"</h2></a><a href='#feedbackPopup' data-rel='popup' data-position-to='window' data-transition='pop'>Leave Feedback</a></li>");
+									
+									$("#feedbackListview").listview("refresh");
+
+								});	
+			//				    alert(res.message);
+								//window.location = "#home"
+							    alert(status);
+						});
+			}
+			function retrieveRequests(){
+				alert("Requests will now be retrieved!");
+						$.getJSON('http://localhost:9001/ubmChangeRequest/retrieve/?callback=?', {
+								name: "retrieveRequest",
+								id: "myID"
+							},
+							function(res,status){
+									$("#requestListview").empty();
+								$.each(res, function(i, record) {
+									//$('#managemyChecklists_content').append("");
+									//alert(record.reviewer_member_id);
+									$('#requestListview').append("<li><a href='#requestDetailPopup' data-rel='popup' data-position-to='window' data-transition='pop'><h1>"+record.submitter+"</h1><h2>"+record.description+"</h2></a><a href='#feedbackPopup' data-rel='popup' data-position-to='window' data-transition='pop' onclick='setactiverequest("+record.Id+")'>Leave Feedback</a></li>");
+									$("#requestListview").listview("refresh");
+
+								});	
+			//				    alert(res.message);
+								//window.location = "#home"
+							    alert(status);
+						});
+			}
+			function retrieveRequestDetail(){
+				
+			}
+			function setactiverequest(activerequestid){
+				window.activerequest = activerequestid;
+				alert(activerequestid)
+			}
 		</script>
     </head>
     <body>
@@ -159,13 +293,14 @@
 				</div>
 			</div>
 		<div data-role="page" id="home" data-position="fixed">
-				<div data-role="panel" id="defaultpanel" data-position="right" data-theme="b">
-					<center><a href="#home" data-theme="b" data-role="button" data-icon="grid">Request Page</a></center>
-					<center><a href="#submitfeedback" data-theme="b" data-role="button" data-icon="grid">Feedback Page</a></center>
+				<div data-role="panel" id="defaultpanel" data-position="left" data-theme="b">
+					<center><a href="#home" data-theme="b" data-role="button" data-icon="grid">Submit Request Page</a></center>
+					<center><a href="#viewfeedback" data-theme="b" data-role="button" data-icon="grid">View Feedback Page</a></center>
+					<center><a href="#viewrequests" data-theme="b" data-role="button" data-icon="grid">View Requests Page</a></center>
 				</div><!-- /defaultpanel -->
 				<div data-role="header" class="logo" >
 					<a href="#defaultpanel" data-icon="arrow-l" data-iconpos="notext">Menu</a>						
-					<h1>UBM Change Request Page</h1>
+					<h1>UBM Submbit Change Request Page</h1>
 				</div>
 				<div data-role="content">
 					<label for="text-basic">Submitter:</label>
@@ -184,74 +319,197 @@
 					<input type="text" name="text-basic" id="text-basic" value="">
 					<label for="textarea">Description:</label>
 					<textarea cols="40" rows="8" name="textarea" id="textarea"></textarea>				
+					<button data-theme="b" data-icon="check" onclick="retrieveImage()">Retrieve Image</button>
 					<button data-theme="b" data-icon="check" onclick="submitRequest()">Submit Request</button>
 				</div>
 				<div data-role="footer" data-position="fixed" data-fullscreen="true">
 
 				</div>
 			</div>
-		<div data-role="page" id="submitfeedback" data-position="fixed">
-				<div data-role="panel" id="defaultpanel2" data-position="right" data-theme="b">
-					<center><a href="#home" data-theme="b" data-role="button" data-icon="grid">Request Page</a></center>
-					<center><a href="#submitfeedback" data-theme="b" data-role="button" data-icon="grid">Feedback Page</a></center>
+		<div data-role="page" id="viewfeedback" data-position="fixed">
+				<div data-role="panel" id="defaultpanel4" data-position="left" data-theme="b">
+					<center><a href="#home" data-theme="b" data-role="button" data-icon="grid">Send Request Page</a></center>
+					 
+					<center><a href="#viewfeedback" data-theme="b" data-role="button" data-icon="grid">View Feedback Page</a></center>
+					<center><a href="#viewrequests" data-theme="b" data-role="button" data-icon="grid">View Requests Page</a></center>
 				</div><!-- /defaultpanel -->
-				<div data-role="header" class="logo" >
-					<a href="#defaultpanel2" data-icon="arrow-l" data-iconpos="notext">Menu</a>										
-						<h1>UBM Change Response Page</h1>
+				<div data-role="header" class="logo">
+					<a href="#defaultpanel4" data-icon="arrow-l" data-iconpos="notext">Menu</a>										
+						<h1>UBM View Feedback Page</h1>
+					<a href="#" data-icon="refresh" data-iconpos="notext" onclick="retrieveFeedback()">Refresh</a>										
 				</div>
 				<div data-role="content">
-					<label for="text-basic">Submitter:</label>
-					<input type="text" name="text-basic" id="text-basic" value="">
-					<label for="text-basic">CCODE:</label>
-					<input type="text" name="text-basic" id="text-basic" value="">
-					<label for="text-basic">Date Submitted:</label>
-					<input type="text" name="text-basic" id="text-basic" value="">
-					<label for="text-basic">Version:</label>
-					<input type="text" name="text-basic" id="text-basic" value="">
-					<label for="text-basic">Phone #:</label>
-					<input type="text" name="text-basic" id="text-basic" value="">
-					<label for="text-basic">UBM Ref Model #:</label>
-					<input type="text" name="text-basic" id="text-basic" value="">
-					<label for="text-basic">BM Ref Manual #:</label>
-					<input type="text" name="text-basic" id="text-basic" value="">
-					<label for="textarea">Description:</label>
-					<textarea cols="40" rows="8" name="textarea" id="textarea"></textarea>
 
-					<fieldset data-role="controlgroup">
-					    <legend>Resolution:</legend>
-					        <input type="radio" name="radio-choice-1" id="radio-choice-1" value="choice-1" checked="checked">
-					        <label for="radio-choice-1">Possible Future Approval</label>
-					        <input type="radio" name="radio-choice-1" id="radio-choice-2" value="choice-2">
-					        <label for="radio-choice-2">Rejected </label>
-					        <input type="radio" name="radio-choice-1" id="radio-choice-3" value="choice-3">
-					        <label for="radio-choice-3">Approve Next Version</label>
-					</fieldset>					
-					<button data-theme="b" data-icon="check" onclick="sendFeedback()">Send Feedback</button>
-
+					<ul data-role="listview" data-filter="true" id="feedbackListview" data-split-icon="plus" data-theme="a" data-split-theme="b" data-filter-placeholder="Search feedback..." data-inset="true">
+					</ul>
 				</div>
 				<div data-role="footer" data-position="fixed" data-fullscreen="true">
 
 				</div>
-			</div>
+		</div>
+		<div data-role="page" id="viewrequests" data-position="fixed">
+				<div data-role="panel" id="defaultpanel5" data-position="left" data-theme="b">
+					<center><a href="#home" data-theme="b" data-role="button" data-icon="grid">Send Request Page</a></center>
+					 
+					<center><a href="#viewfeedback" data-theme="b" data-role="button" data-icon="grid">View Feedback Page</a></center>
+					<center><a href="#viewrequests" data-theme="b" data-role="button" data-icon="grid">View Requests Page</a></center>
+				</div><!-- /defaultpanel -->
+				<div data-role="header" class="logo">
+					<a href="#defaultpanel5" data-icon="arrow-l" data-iconpos="notext">Menu</a>										
+						<h1>UBM View Change Requests Page</h1>
+					<a href="#" data-icon="refresh" data-iconpos="notext" onclick="retrieveRequests()">Refresh</a>										
+				</div>
+				<div data-role="content">
+					<div data-role="popup" id="feedbackPopup" class="ui-content" style="max-width:280px">
+						<form id="feedbackPopupForm" name="feedbackPopupForm">
+							<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-left">Close</a>
+							<h2	>UBMChangeRequest Submit Feedback Page</h2>
+							<label for="text-basic">Reviewer:</label>
+							<input type="text" name="text-basic" id="reviewer_member_id" value="">
+							<label for="textarea">Resolution Explanation:</label>
+							<textarea cols="40" rows="8" name="textarea" id="resolution_explanation"></textarea>
+							<fieldset data-role="controlgroup" data-mini="true" id="resolution">
+							    <legend>Resolution:</legend>
+							        <input type="radio" name="radio-choice-1" id="radio-choice-1" value="Possible Future Aproval" checked="checked">
+							        <label for="radio-choice-1">Possible Future Approval</label>
+							        <input type="radio" name="radio-choice-1" id="radio-choice-2" value="Rejected">
+							        <label for="radio-choice-2">Rejected </label>
+							        <input type="radio" name="radio-choice-1" id="radio-choice-3" value="Approve Next Version">
+							        <label for="radio-choice-3">Approve Next Version</label>
+							</fieldset>					
+							<button data-theme="b" data-icon="check" onclick="submitFeedback()">Send Feedback</button>
+						</form>
+					</div>
+					<div data-role="popup" id="requestDetailPopup" class="ui-content" style="max-width:280px">
+						
+					</div>
+					<ul data-role="listview" data-filter="true" id="requestListview" data-filter-placeholder="Search Requests..." data-inset="true">
+					</ul>				
+				</div>
+				<div data-role="footer" data-position="fixed" data-fullscreen="true">
+
+				</div>
+		</div>
 		<div data-role="page" id="template" data-position="fixed">
-				<div data-role="panel" id="defaultpanel2" data-position="right" data-theme="b">
-					<center><a href="#home" data-theme="b" data-role="button" data-icon="grid">Request Page</a></center>
-					<center><a href="#submitfeedback" data-theme="b" data-role="button" data-icon="grid">Feedback Page</a></center>
+				<div data-role="panel" id="defaultpanel2" data-position="left" data-theme="b">
+					<center><a href="#home" data-theme="b" data-role="button" data-icon="grid">Send Request Page</a></center>
+					<center><a href="#viewfeedback" data-theme="b" data-role="button" data-icon="grid">View Feedback Page</a></center>
+					<center><a href="#viewrequests" data-theme="b" data-role="button" data-icon="grid">View Requests Page</a></center>
 				</div><!-- /defaultpanel -->
 				<div data-role="header" class="logo">
 					<a href="#defaultpanel2" data-icon="arrow-l" data-iconpos="notext">Menu</a>										
 						<h1>UBM Change Response Page</h1>
 				</div>
 				<div data-role="content">
-
-				</div>
+									</div>
 				<div data-role="footer" data-position="fixed" data-fullscreen="true">
 
 				</div>
-			</div>
+		</div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript">
+			$( document ).on( "pageshow", "#main", function() {
+					var defaultLatLng = new google.maps.LatLng(41.6964, -111.8715);  // Default to Hollywood, CA when no geolocation support
+			
+					if ( navigator.geolocation ) {
+						function success(pos) {
+							var myLocation = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude)
+						    var lat = myLocation.lat();
+						    var lng = myLocation.lng();
+						    window.lat = myLocation.lat();
+						    window.lng = myLocation.lng();
+						  	//alert(lat);
+						  	//alert(lng);
+							// Location found, show map with these coordinates
+							drawMap(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
+							$.getJSON('http://www.findmydriver.com/updatLoc.php?callback=?', {
+									appname: "FindMyDriver",
+									RQType: "updateLocation",
+									latitude: lat,
+									longitude: lng,
+									member_id: "0",
+									device_id: "device.uuid"
+								},
+								function(res,status){
+							    alert(res.message);
+							   // alert(status);
+							});
+						}
+			
+						function fail(error) {
+							drawMap(defaultLatLng);  // Failed to find location, show default map
+						}
+			
+						// Find the users current position.  Cache the location for 5 minutes, timeout after 6 seconds
+						navigator.geolocation.getCurrentPosition(success, fail, {maximumAge: 500000, enableHighAccuracy:true, timeout: 6000});
+					} else {
+						drawMap(defaultLatLng);  // No geolocation support, show default map
+					}
+			
+					function drawMap(latlng) {
+						var myOptions = {
+							zoom: 15,
+							center: latlng,
+							disableDefaultUI: true,
+							mapTypeId: google.maps.MapTypeId.SATELLITE
+						};
+			
+						var map = new google.maps.Map(document.getElementById("main_map_canvas"), myOptions);
+			
+						// Add an overlay to the map of current lat/lng
+						var marker = new google.maps.Marker({
+							position: latlng,
+							map: map,
+							title: "Login Location!"
+						});
+					}
+			
+				});
+			$( document ).on( "pageinit", "#viewrequests", function() {
+			    $( document ).on( "swipeleft swiperight", "#viewrequests", function( e ) {
+			        // We check if there is no open panel on the page because otherwise
+			        // a swipe to close the left panel would also open the right panel (and v.v.).
+			        // We do this by checking the data that the framework stores on the page element (panel: open).
+			        if ( $.mobile.activePage.jqmData( "panel" ) !== "open" ) {
+			            if ( e.type === "swipeleft"  ) {
+			                $( "#right-panel" ).panel( "open" );
+			            } else if ( e.type === "swiperight" ) {
+			                $( "#defaultpanel5" ).panel( "open" );
+			            }
+			        }
+			    });
+			    retrieveRequests();
+			});
+			$( document ).on( "pageinit", "#viewfeedback", function() {
+			    $( document ).on( "swipeleft swiperight", "#viewfeedback", function( e ) {
+			        // We check if there is no open panel on the page because otherwise
+			        // a swipe to close the left panel would also open the right panel (and v.v.).
+			        // We do this by checking the data that the framework stores on the page element (panel: open).
+			        if ( $.mobile.activePage.jqmData( "panel" ) !== "open" ) {
+			            if ( e.type === "swipeleft"  ) {
+			                $( "#right-panel" ).panel( "open" );
+			            } else if ( e.type === "swiperight" ) {
+			                $( "#defaultpanel4" ).panel( "open" );
+			            }
+			        }
+			    });
+			    retrieveFeedback();
+			});
+			$( document ).on( "pageinit", "#home", function() {
+			    $( document ).on( "swipeleft swiperight", "#home", function( e ) {
+			        // We check if there is no open panel on the page because otherwise
+			        // a swipe to close the left panel would also open the right panel (and v.v.).
+			        // We do this by checking the data that the framework stores on the page element (panel: open).
+			        if ( $.mobile.activePage.jqmData( "panel" ) !== "open" ) {
+			            if ( e.type === "swipeleft"  ) {
+			                $( "#right-panel" ).panel( "open" );
+			            } else if ( e.type === "swiperight" ) {
+			                $( "#defaultpanel" ).panel( "open" );
+			            }
+			        }
+			    });
+			});
             app.initialize();
         </script>
     </body>
