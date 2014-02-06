@@ -34,6 +34,7 @@
 		<!--Begin Jquery UI and touchpounch -->
 		<link rel="stylesheet" href="css/jquery-ui.css">
 		<link rel="stylesheet" href="css/slider.css">
+		<link rel="stylesheet" href="css/index.css">
 		<script src="js/slider.js"></script>
 		<script src="js/jquery-ui.js"></script>
 		<script src="js/jquery.ui.touch-punch.js"></script>
@@ -258,7 +259,7 @@
 		</script>
     </head>
     <body>
-		<div data-role="page" id="main" data-position="fixed">
+		<div data-role="page" class="ubm_page" id="main" data-position="fixed">
 				<div data-role="header" class="logo" >
 						<h1>UBM Change <br>Request Login</h1>
 				</div>
@@ -295,10 +296,11 @@
 				</div>
 				<div data-role="footer" data-position="fixed" data-fullscreen="true">
 					<center><p>Welcome to UBM Alpha v1.1</p></center>
+					<h2 class="offline">Unable to connect to a Network <br> This app requires an internet connection. <br> Connect to the internet and restart this app to continue.</h2>
 				<!--	<center><a href="#newnote" data-role="button" data-icon="plus" onclick="testConnection()">Test Connection</a></center> -->
 				</div>
 			</div>
-		<div data-role="page" id="home" data-position="fixed">
+		<div data-role="page" class="ubm_page" id="home" data-position="fixed">
 				<div data-role="panel" id="defaultpanel" data-position="left" data-theme="b">
 					<center><a href="#home" data-theme="b" data-role="button" data-icon="grid">Submit Request Page</a></center>
 					<center><a href="#viewfeedback" data-theme="b" data-role="button" data-icon="grid">View Feedback Page</a></center>
@@ -311,26 +313,32 @@
 					<h1>UBM Submit <br>Change Request Page</h1>
 				</div>
 				<div data-role="content">
-					<label for="text-basic">CCODE:</label>
-					<input type="text" name="text-basic" id="home_content_ccode" value="">
-					<label for="text-basic">UBM Version:</label>
-					<input type="text" name="text-basic" id="home_content_ubmversion" value="">
-					<label for="text-basic">Phone #:</label>
-					<input type="text" name="text-basic" id="home_content_phone" value="">
-					<label for="text-basic">Email :</label>
-					<input type="text" name="text-basic" id="home_content_email" value="">
-					<label for="text-basic">UBM Ref Model #:</label>
-					<input type="text" name="text-basic" id="home_content_ubmref" value="">
-					<label for="text-basic">BM Ref Manual #:</label>
-					<input type="text" name="text-basic" id="home_content_bmref" value="">
-					<label for="textarea">Description:</label>
-					<textarea cols="40" rows="8" name="textarea" id="home_content_description"></textarea>				
-					<button data-theme="b" data-icon="check" onclick="retrieveImage()">Retrieve Image</button>
-					<button data-theme="b" data-icon="check" onclick="submitRequest()">Submit Request</button>
+					<div style="width: 400px; height: auto; margin-left: auto; margin-right:auto;">
+						<label for="text-basic">CCODE:</label>
+						<input type="text" name="text-basic" id="home_content_ccode" value="">
+						<select  id="home_content_ubmversion" value="Select" data-native-menu="false">
+							<option>UBM Version:</option>
+							<option value="A1">1.3</option>
+							<option value="A2">1.4</option>
+							<option value="A3">1.5</option>
+						</select>
+						<label for="text-basic">Phone #:</label>
+						<input type="text" name="text-basic" id="home_content_phone" value="">
+						<label for="text-basic">Email :</label>
+						<input type="text" name="text-basic" id="home_content_email" value="">
+						<label for="text-basic">UBM Ref Model #:</label>
+						<input type="text" name="text-basic" id="home_content_ubmref" value="">
+						<label for="text-basic">BM Ref Manual #:</label>
+						<input type="text" name="text-basic" id="home_content_bmref" value="">
+						<label for="textarea">Description:</label>
+						<textarea cols="40" rows="8" name="textarea" id="home_content_description"></textarea>				
+						<button data-theme="b" data-icon="check" onclick="retrieveImage()">Retrieve Image</button>
+						<button data-theme="b" data-icon="check" onclick="submitRequest()">Submit Request</button>						
+					</div>
 				</div>
 
 			</div>
-		<div data-role="page" id="viewfeedback" data-position="fixed">
+		<div data-role="page" class="ubm_page" id="viewfeedback" data-position="fixed">
 				<div data-role="panel" id="defaultpanel1" data-position="left" data-theme="b">
 					<center><a href="#home" data-theme="b" data-role="button" data-icon="grid">Submit Request Page</a></center>
 					<center><a href="#viewfeedback" data-theme="b" data-role="button" data-icon="grid">View Feedback Page</a></center>
@@ -352,7 +360,7 @@
 
 				</div>
 		</div>
-		<div data-role="page" id="viewrequests" data-position="fixed">
+		<div data-role="page" class="ubm_page" id="viewrequests" data-position="fixed">
 				<div data-role="panel" id="defaultpanel2" data-position="left" data-theme="b">
 					<center><a href="#home" data-theme="b" data-role="button" data-icon="grid">Submit Request Page</a></center>
 					<center><a href="#viewfeedback" data-theme="b" data-role="button" data-icon="grid">View Feedback Page</a></center>
@@ -394,7 +402,7 @@
 
 				</div>
 		</div>
-		<div data-role="page" id="requestsReport" data-position="fixed">
+		<div data-role="page" class="ubm_page" id="requestsReport" data-position="fixed">
 				<div data-role="panel" id="defaultpanel3" data-position="left" data-theme="b">
 					<center><a href="#home" data-theme="b" data-role="button" data-icon="grid">Submit Request Page</a></center>
 					<center><a href="#viewfeedback" data-theme="b" data-role="button" data-icon="grid">View Feedback Page</a></center>
@@ -413,7 +421,7 @@
 
 				</div>
 		</div>
-		<div data-role="page" id="feedbackReport" data-position="fixed">
+		<div data-role="page" class="ubm_page" id="feedbackReport" data-position="fixed">
 				<div data-role="panel" id="defaultpanel4" data-position="left" data-theme="b">
 					<center><a href="#home" data-theme="b" data-role="button" data-icon="grid">Send Request Page</a></center>
 					<center><a href="#viewfeedback" data-theme="b" data-role="button" data-icon="grid">View Feedback Page</a></center>
@@ -429,7 +437,7 @@
 
 				</div>
 		</div>
-		<div data-role="page" id="template" data-position="fixed">
+		<div data-role="page" class="ubm_page" id="template" data-position="fixed">
 				<div data-role="panel" id="defaultpanel5" data-position="left" data-theme="b">
 					<center><a href="#home" data-theme="b" data-role="button" data-icon="grid">Submit Request Page</a></center>
 					<center><a href="#viewfeedback" data-theme="b" data-role="button" data-icon="grid">View Feedback Page</a></center>
@@ -450,6 +458,32 @@
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript">
+	        function checkConnection() {
+	            var networkState = navigator.connection.type;	
+	            var states = {};
+	            states[Connection.UNKNOWN]  = 'Unknown connection';
+	            states[Connection.ETHERNET] = 'Ethernet connection';
+	            states[Connection.WIFI]     = 'WiFi connection';
+	            states[Connection.CELL_2G]  = 'Cell 2G connection';
+	            states[Connection.CELL_3G]  = 'Cell 3G connection';
+	            states[Connection.CELL_4G]  = 'Cell 4G connection';
+	            states[Connection.CELL]     = 'Cell generic connection';
+	            states[Connection.NONE]     = 'No network connection';
+	
+	            //alert('Connection type: ' + states[networkState]);
+				if(states[networkState]=='No network connection')
+				{
+					$(".offline").css("visibility","visible");
+				}else{
+					$(".offline").css("visibility","hidden");					
+				}
+	        }
+			$( document ).on( "pageshow", ".ubm_page", function() {
+				//	$(".offline").css("visibility","visible");
+				setTimeout(function() {
+					checkConnection();
+				}, 3000); 
+			});
 			$( document ).on( "pageshow", "#main", function() {
 					var defaultLatLng = new google.maps.LatLng(41.6964, -111.8715);  // Default to Hollywood, CA when no geolocation support
 			
@@ -473,7 +507,7 @@
 									device_id: "device.uuid"
 								},
 								function(res,status){
-							    alert(res.message);
+							    //alert(res.message);
 							   // alert(status);
 							});
 						}
@@ -507,6 +541,7 @@
 					}
 			
 				});
+
 			$( document ).on( "pageinit", "#viewrequests", function() {
 			/*    $( document ).on( "swipeleft swiperight", "#viewrequests", function( e ) {
 			        // We check if there is no open panel on the page because otherwise

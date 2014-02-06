@@ -25,6 +25,9 @@
     <feature name="FileTransfer">
         <param name="ios-package" value="CDVFileTransfer" />
     </feature>
+    <feature name="NetworkStatus">
+        <param name="ios-package" value="CDVConnection" />
+    </feature>
     <name>UBMChangeRequest</name>
     <description>
         A sample Apache Cordova application that responds to the deviceready event.
